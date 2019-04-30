@@ -4,6 +4,14 @@ const url = require('url'),
 	events = require('events'),
 	{promisify} = require('util');
 
+const safe = (cd) => {
+	try {
+		return cd();
+	} catch(e) {
+		//
+	}
+};
+
 class Proxy extends events {
 
 	constructor(host, to) {
@@ -23,7 +31,8 @@ class Proxy extends events {
 			client.on('error', (err) => {
 				this.emit('error', [key, 'client', err]);
 			}).on('close', () => {
-				socket.close();
+				safe(() => client.close());
+				safe(() => socket.destroy());
 			}).on('data', (data) => {
 				this.emit('recieve', [key, data]);
 				return promisify(socket.write.bind(socket))(data);
@@ -32,7 +41,8 @@ class Proxy extends events {
 			socket.on('error', (err) => {
 				this.emit('error', [key, 'socket', err]);
 			}).on('close', () => {
-				client.close();
+				safe(() => client.close());
+				safe(() => socket.destroy());
 			}).on('data', (data) => {
 				this.emit('sent', [key, data]);
 				return promisify(client.write.bind(client))(data);
@@ -52,7 +62,8 @@ class Proxy extends events {
 	close() {
 		for (let i in this.socket) {
 			if (this.socket[i]) {
-				this.socket[i].close();
+				safe(() => this.socket[i].close());
+				safe(() => this.socket[i].destroy());
 			}
 		}
 		return new Promise((resolve) => {

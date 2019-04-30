@@ -16,13 +16,9 @@ const package = (data) => {
 let p = new Proxy('localhost:5670', 'localhost:5671');
 
 p.on('recieve', (data) => {
-	package(data[1]).then((r) => {
-		console.log('recieve', data[0], r.toString());
-	});
+	package(data[1]).then((r) => console.log('recieve', data[0], r.toString()));
 }).on('sent', (data) => {
-	package(data[1]).then((r) => {
-		console.log('sent', data[0], r.toString());
-	});
+	package(data[1]).then((r) => console.log('sent', data[0], r.toString()));
 });
 
 p.on('open', () => {
@@ -41,7 +37,7 @@ p.on('open', () => {
 				c.send(JSON.stringify({test: 'cat' + i}));
 				i++;
 			}, 1000);
-			c.on('message', (res) => {
+			c.on('message', (/* res*/) => {
 				// console.log('Client message', JSON.parse(res.toString()));
 			});
 		});

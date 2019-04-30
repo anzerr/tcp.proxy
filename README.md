@@ -16,6 +16,6 @@ let p = new Proxy('localhost:5670', 'localhost:5671');
 p.on('recieve', (data) => {
 	console.log('recieve', data[0], data[1].toString());
 }).on('sent', (data) => {
-	console.log('recieve', data[0], data[1].toString());
+	console.log('sent', data[0], data[1].toString());
 });
 ```
