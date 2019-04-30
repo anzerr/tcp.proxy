@@ -1,0 +1,39 @@
+{
+	"name": "tcp.proxy",
+	"version": "1.0.0",
+	"description": "",
+	"main": "index.js",
+	"scripts": {
+		"test": "node test.js",
+		"example": "node bin.js --host localhost:5964 --remote localhost:5965"
+	},
+	"bin": {
+		"tcpproxy": "./bin.js"
+	},
+	"keywords": [],
+	"author": "anzerr",
+	"license": "MIT",
+	"devDependencies": {
+		"eslint": "5.11.1",
+		"eslint-config-basic": "git+https://git@github.com/anzerr/eslintrc.git"
+	},
+	"eslintConfig": {
+		"extends": "eslint-config-basic"
+	},
+	"dependencies": {
+		"cli.util": "git+https://git@github.com/anzerr/cli.util.git",
+		"net.socket": "git+https://git@github.com/anzerr/net.socket.git"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git@github.com:anzerr/tcp.proxy.git"
+	},
+	"engines": {
+		"node": ">= 0.10.0"
+	},
+	"types": "index.d.ts",
+	"bugs": {
+		"url": "https://github.com/anzerr/tcp.proxy/issues"
+	},
+	"homepage": "https://github.com/anzerr/tcp.proxy#readme"
+}
