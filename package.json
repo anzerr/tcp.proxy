@@ -8,7 +8,7 @@
 		"example": "node bin.js --host localhost:5964 --remote localhost:5965"
 	},
 	"bin": {
-		"tcpproxy": "./bin.js"
+		"tcpproxy": "./src/bin.js"
 	},
 	"keywords": [],
 	"author": "anzerr",
@@ -22,7 +22,8 @@
 	},
 	"dependencies": {
 		"cli.util": "git+https://git@github.com/anzerr/cli.util.git",
-		"net.socket": "git+https://git@github.com/anzerr/net.socket.git"
+		"net.socket": "git+https://git@github.com/anzerr/net.socket.git",
+		"unique.util": "git+https://git@github.com/anzerr/uKey.library.git"
 	},
 	"repository": {
 		"type": "git",

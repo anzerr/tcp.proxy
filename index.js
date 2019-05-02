@@ -2,15 +2,7 @@
 const url = require('url'),
 	net = require('net'),
 	events = require('events'),
-	{promisify} = require('util');
-
-const safe = (cd) => {
-	try {
-		return cd();
-	} catch(e) {
-		//
-	}
-};
+	Tunnel = require('./src/tunnel.js');
 
 class Proxy extends events {
 
@@ -20,63 +12,41 @@ class Proxy extends events {
 			host: url.parse((host.match(/^.*?:\/\//)) ? host : 'tcp://' + host),
 			to: url.parse((to.match(/^.*?:\/\//)) ? to : 'tcp://' + to)
 		};
-		this.socket = [];
+		this.tunnel = {};
 		this.server = net.createServer((socket) => {
-			let key = this.key();
-
-			const client = new net.Socket();
-			client.connect(this.uri.to.port, this.uri.to.hostname, () => {
-				this.emit('connect', [key, socket, client]);
+			let t = new Tunnel(socket, this.uri.to);
+			t.on('connect', () => {
+				this.emit('connect', t);
 			});
-			client.on('error', (err) => {
-				this.emit('error', [key, 'client', err]);
-			}).on('close', () => {
-				safe(() => client.close());
-				safe(() => socket.destroy());
-			}).on('data', (data) => {
-				this.emit('recieve', [key, data]);
-				return promisify(socket.write.bind(socket))(data);
-			});
-
-			socket.on('error', (err) => {
-				this.emit('error', [key, 'socket', err]);
-			}).on('close', () => {
-				safe(() => client.close());
-				safe(() => socket.destroy());
-			}).on('data', (data) => {
-				this.emit('sent', [key, data]);
-				return promisify(client.write.bind(client))(data);
-			});
-			this.socket.push(client);
-			this.socket.push(socket);
+			t.on('close', () => this.tunnel[t.key] = null);
+			this.tunnel[t.key] = t;
 		});
 		this.server.on('error', (e) => {
 			this.emit('error', e);
 		}).on('close', (e) => {
 			this.emit('close', e);
+			this.close();
 		}).listen({host: this.uri.host.hostname, port: this.uri.host.port}, () => {
 			this.emit('open');
 		});
 	}
 
 	close() {
-		for (let i in this.socket) {
-			if (this.socket[i]) {
-				safe(() => this.socket[i].close());
-				safe(() => this.socket[i].destroy());
-			}
-		}
 		return new Promise((resolve) => {
+			for (let i in this.tunnel) {
+				if (this.tunnel[i]) {
+					this.socket[i].close();
+				}
+			}
 			this.server.close(() => {
 				resolve();
 			});
 		});
 	}
 
-	key() {
-		return new Date().getTime() + '.' + Math.random().toString(36).substr(2);
-	}
-
 }
+
+Proxy.RX = 'recieved';
+Proxy.TX = 'transmitted';
 
 module.exports = Proxy;
