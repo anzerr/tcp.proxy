@@ -1,22 +1,20 @@
 
-const zlib = require('zlib'),
-	{promisify} = require('util'),
-	net = require('net.socket'),
+const net = require('net.socket'),
 	Proxy = require('./index.js');
+
+process.on('unhandledRejection', (reason, p) => {
+	console.log('Unhandled Rejection at: Promise', p, 'reason:', reason);
+	process.exit(1);
+});
 
 const package = (data) => {
 	let buffer = data.slice(6, data.length), json = null;
-	return promisify(zlib.unzip)(buffer).then((d) => {
-		json = JSON.parse(d);
-		json.test = (json.test || '') + '.';
-		return promisify(zlib.deflate)(JSON.stringify(json));
-	}).then((d) => {
-		const size = Buffer.alloc(6);
-		size.writeIntLE(d.length, 0, 6);
-		return [json, Buffer.concat([size, d])];
-	}).catch(() => {
-		return data;
-	});
+	json = JSON.parse(buffer.toString());
+	json.test = (json.test || '') + '.';
+	let d = Buffer.from(JSON.stringify(json));
+	const size = Buffer.alloc(6);
+	size.writeIntLE(d.length, 0, 6);
+	return Promise.resolve([json, Buffer.concat([size, d])]);
 };
 
 let p = new Proxy('localhost:5670', 'localhost:5671');
@@ -24,12 +22,12 @@ let p = new Proxy('localhost:5670', 'localhost:5671');
 p.on('connect', (tunnel) => {
 	tunnel.on(Proxy.RX, (data, resolve) => {
 		package(data).then((r) => {
-			console.log(Proxy.RX, tunnel.key, r[0]);
+			console.log('rx', Proxy.RX, tunnel.key, r[0]);
 			resolve(r[1]);
 		});
 	}).on(Proxy.TX, (data, resolve) => {
 		package(data).then((r) => {
-			console.log(Proxy.TX, tunnel.key, r[0]);
+			console.log('tx', Proxy.TX, tunnel.key, r[0]);
 			resolve(r[1]);
 		});
 	}).on('close', () => {
@@ -50,14 +48,17 @@ p.on('open', () => {
 		c.on('connect', () => {
 			// console.log('client connected');
 			let i = 0;
-			setInterval(() => {
+			let set = setInterval(() => {
 				if (i > 5) {
 					c.close();
+					p.close();
+					server.close();
+					clearInterval(set);
 				} else {
 					c.send(JSON.stringify({test: 'cat' + i}));
 				}
 				i++;
-			}, 1000);
+			}, 100);
 			c.on('message', (/* res*/) => {
 				// console.log('Client message', JSON.parse(res.toString()));
 			});
