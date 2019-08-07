@@ -4,7 +4,8 @@ tunnel a tcp connection to a remote socket and listen/edit the traffic through t
 
 #### `Install`
 ``` bash
-npm install --save git+https://git@github.com/anzerr/tcp.proxy.git
+npm install --save git+https://github.com/anzerr/tcp.proxy.git
+npm install --save @anzerr/tcp.proxy
 ```
 
 ### `Example`
