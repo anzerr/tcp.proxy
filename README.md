@@ -1,6 +1,6 @@
 
 ### `Intro`
-tunnel a tcp connection to a remote socket and listen/edit the traffic through the tunnel
+Tunnel a tcp connection to a remote socket and listen/edit the traffic through the tunnel.
 
 #### `Install`
 ``` bash

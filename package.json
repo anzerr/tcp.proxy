@@ -1,6 +1,6 @@
 {
 	"name": "tcp.proxy",
-	"version": "1.0.3",
+	"version": "1.0.5",
 	"keywords": [],
 	"homepage": "https://github.com/anzerr/tcp.proxy#readme",
 	"bugs": {
@@ -30,7 +30,6 @@
 		"unique.util": "git+https://git@github.com/anzerr/uKey.library.git"
 	},
 	"devDependencies": {
-		"eslint": "5.11.1",
 		"eslint-config-basic": "git+https://git@github.com/anzerr/eslintrc.git"
 	},
 	"engines": {
