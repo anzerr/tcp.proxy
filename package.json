@@ -1,7 +1,14 @@
 {
 	"name": "tcp.proxy",
 	"version": "1.0.7",
-	"keywords": [],
+	"description": "Tunnel a tcp connection",
+	"keywords": [
+		"mitmproxy",
+		"nodejs",
+		"proxy",
+		"tcp",
+		"util"
+	],
 	"homepage": "https://github.com/anzerr/tcp.proxy#readme",
 	"bugs": {
 		"url": "https://github.com/anzerr/tcp.proxy/issues"
@@ -27,7 +34,7 @@
 	"dependencies": {
 		"cli.util": "git+https://git@github.com/anzerr/cli.util.git",
 		"net.socket": "git+https://git@github.com/anzerr/net.socket.git",
-		"unique.util": "git+https://git@github.com/anzerr/uKey.library.git"
+		"unique.util": "git+https://git@github.com/anzerr/unique.util.git"
 	},
 	"devDependencies": {
 		"eslint-config-basic": "git+https://git@github.com/anzerr/eslintrc.git"

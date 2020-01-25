@@ -1,5 +1,7 @@
 
 ### `Intro`
+![GitHub Actions status | publish](https://github.com/anzerr/tcp.proxy/workflows/publish/badge.svg)
+
 Tunnel a tcp connection to a remote socket and listen/edit the traffic through the tunnel.
 
 #### `Install`
