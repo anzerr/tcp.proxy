@@ -1,6 +1,6 @@
 {
 	"name": "tcp.proxy",
-	"version": "1.0.11",
+	"version": "1.0.12",
 	"description": "Tunnel a tcp connection",
 	"keywords": [
 		"mitmproxy",
