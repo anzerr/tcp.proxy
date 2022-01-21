@@ -28,17 +28,12 @@
 		"test": "node test.js",
 		"example": "node bin.js --host localhost:5964 --remote localhost:5965"
 	},
-	"eslintConfig": {
-		"extends": "eslint-config-basic"
-	},
 	"dependencies": {
 		"cli.util": "git+https://git@github.com/anzerr/cli.util.git",
 		"net.socket": "git+https://git@github.com/anzerr/net.socket.git",
 		"unique.util": "git+https://git@github.com/anzerr/unique.util.git"
 	},
-	"devDependencies": {
-		"eslint-config-basic": "git+https://git@github.com/anzerr/eslintrc.git"
-	},
+	"devDependencies": {},
 	"engines": {
 		"node": ">= 0.10.0"
 	}
